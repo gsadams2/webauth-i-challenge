@@ -27,6 +27,8 @@ router.post("/login", (req, res) => {
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
+        req.session.username = user.username; //<<<<<<<<<
+
         res.status(200).json({ message: "Logged in" });
       } else {
         res.status(401).json({ message: "you shall not pass!" });
@@ -43,6 +45,20 @@ router.get("/users", authenticate, (req, res) => {
       res.json(users);
     })
     .catch(err => res.send(err));
+});
+
+router.get("/logout", (req, res) => {
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        res.status(500).json({ message: "you can checkout but can't leave" });
+      } else {
+        res.status(200).json({ mesage: "bye....." });
+      }
+    });
+  } else {
+    res.status(200).json({ message: "peace bro" });
+  }
 });
 
 module.exports = router;
