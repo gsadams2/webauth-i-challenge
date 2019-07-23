@@ -1,6 +1,6 @@
 const express = require("express");
 const helmet = require("helmet");
-const cors = require("cors");
+// const cors = require("cors");
 const session = require("express-session");
 const KnexSessionStore = require("connect-session-knex")(session);
 
@@ -10,7 +10,7 @@ module.exports = server => {
     name: "cubs", // defaults to sid (which means session id)
     secret: "keep it secret, keep it safe!", // to encrypt/decrypt the cookie
     cookie: {
-      maxAge: 1000 * 10, // this is in milliseconds so 5 minutes
+      maxAge: 1000 * 60 * 10, // this is in milliseconds so 10 minutes
       secure: false, // true in production, only send cookie over https
       httpOnly: true // JS can't access the cookie on the client
     },
@@ -28,6 +28,6 @@ module.exports = server => {
 
   server.use(helmet());
   server.use(express.json());
-  server.use(cors());
+  //   server.use(cors());
   server.use(session(sessionConfig)); ///// <<<< 3. turn on sessions
 };
